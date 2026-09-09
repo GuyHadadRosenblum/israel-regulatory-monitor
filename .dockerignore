@@ -1,0 +1,14 @@
+.git
+.venv
+.pnpm-store
+**/node_modules
+**/dist
+**/__pycache__
+data
+src/data
+config
+.env
+.env.*
+artifacts
+*.docx
+*.pdf
