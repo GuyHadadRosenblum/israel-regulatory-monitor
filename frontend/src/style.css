@@ -10,6 +10,19 @@
   --blue: #256ba0;
   --teal: #22796b;
 }
+.overview-brief { background: white; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; margin-top: 28px; }
+.brief-heading { padding: 26px 28px 18px; }
+.brief-heading h2 { margin-bottom: 8px; }
+.brief-heading p { color: var(--muted); margin: 0; }
+.attention-row { display: flex; align-items: center; gap: 22px; width: 100%; padding: 22px 28px; text-align: right; border: 0; border-top: 1px solid var(--line); background: white; }
+.attention-row:hover { background: #edf5fa; }
+.attention-row > strong { font-size: 28px; min-width: 34px; }
+.attention-row > span { flex: 1; }
+.attention-row b, .attention-row small { display: block; }
+.attention-row small { color: var(--muted); margin-top: 5px; }
+.overview-note { display: flex; gap: 14px; align-items: flex-start; margin: 24px 0; color: var(--muted); }
+.overview-note svg { flex-shrink: 0; margin-top: 5px; }
+.overview-note p { max-width: 680px; }
 * {
   box-sizing: border-box;
 }

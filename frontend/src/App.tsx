@@ -201,6 +201,12 @@ export default function App() {
     ["reports", "דוחות ותוצרים", FileText],
     ["about", "על הפרויקט", GitBranch],
   ] as const;
+  function openMonitor(nextStatus = "all") {
+    setStatus(nextStatus);
+    setQuery("");
+    setMinistry("all");
+    setView("monitor");
+  }
   return (
     <div className="shell">
       <aside className="sidebar">
@@ -299,21 +305,22 @@ export default function App() {
                       ? "כל הרגולציה. תמונה אחת."
                       : "מפרסום לפנייה. בלי לפספס."}
                   </h1>
-                  <p>פרסומי חקיקה, פניות רשמיות והפערים שדורשים תשומת לב.</p>
+                  <p>{view === "overview" ? "סיכום המעקב והפערים שדורשים תשומת לב." : "הפעלת איסוף, בדיקת התאמות ועבודה עם מאגר הרגולציות."}</p>
                 </div>
-                <button className="primary" onClick={run} disabled={running}>
+                {view === "overview" ? <button className="primary" onClick={() => openMonitor()}>מעבר לניטור והצלבה <ChevronLeft size={16} /></button> : <button className="primary" onClick={run} disabled={running}>
                   <Play size={16} />
                   {running
                     ? "הניטור מתבצע…"
                     : mode === "demo"
                       ? "הפעלת הדגמה"
                       : "הפעלת ניטור"}
-                </button>
+                </button>}
               </section>
+              {view === "overview" && <>
               <section className="metrics" aria-label="סיכום נתונים">
                 <button
-                  onClick={() => setStatus("all")}
-                  className={status === "all" ? "metric selected" : "metric"}
+                  onClick={() => openMonitor()}
+                  className="metric"
                 >
                   <span>
                     רגולציות במעקב <FileText size={17} />
@@ -321,7 +328,7 @@ export default function App() {
                   <strong>{rows.length.toString().padStart(2, "0")}</strong>
                   <small>מכל מקורות המידע</small>
                 </button>
-                <button onClick={() => setStatus("matched")} className="metric">
+                <button onClick={() => openMonitor("matched")} className="metric">
                   <span>
                     פניות שהוצלבו <ShieldCheck size={17} />
                   </span>
@@ -331,7 +338,7 @@ export default function App() {
                     נמצאה התאמה בין המקורות
                   </small>
                 </button>
-                <button onClick={() => setStatus("missing")} className="metric">
+                <button onClick={() => openMonitor("missing")} className="metric">
                   <span>
                     ללא פנייה רשמית <Info size={17} />
                   </span>
@@ -341,7 +348,7 @@ export default function App() {
                     פרסום ללא פנייה תואמת
                   </small>
                 </button>
-                <button onClick={() => setStatus("review")} className="metric">
+                <button onClick={() => openMonitor("review")} className="metric">
                   <span>
                     התאמות לבדיקה <Search size={17} />
                   </span>
@@ -354,6 +361,24 @@ export default function App() {
                   <small>נדרשת בדיקה אנושית</small>
                 </button>
               </section>
+              <section className="overview-brief" aria-label="סדר יום לבדיקה">
+                <div className="brief-heading">
+                  <h2>מה דורש תשומת לב?</h2>
+                  <p>{counts.missing + counts.review} רשומות ללא התאמה מאומתת. בחרו קבוצה כדי לעבור לבדיקה ממוקדת.</p>
+                </div>
+                {(["missing", "review", "submission"] as const).map((kind) => {
+                  const count = rows.filter((r) => r.status === kind).length;
+                  return <button className="attention-row" key={kind} onClick={() => openMonitor(kind)}>
+                    <strong>{count}</strong>
+                    <span><b>{labels[kind]}</b><small>{kind === "missing" ? "פרסומים שלא אותרה עבורם פנייה תואמת" : kind === "review" ? "מסמכים שההתאמה ביניהם דורשת בדיקה אנושית" : "פניות שטרם נמצא עבורן פרסום תואם"}</small></span>
+                    <ChevronLeft size={19} />
+                  </button>;
+                })}
+                {!rows.length && <p className="inline-note">טרם הופק דוח. עברו לניטור והצלבה כדי להתחיל.</p>}
+              </section>
+              <div className="overview-note"><ShieldCheck size={22} /><p>תמונת המצב מסכמת את הנתונים הזמינים במערכת. איסוף חדש, סינון ופרטי מסמכים נמצאים בלשונית ניטור והצלבה.</p></div>
+              </>}
+              {view === "monitor" && <>
               <section className="pipeline">
                 <div className="pipeline-head">
                   <div>
@@ -540,6 +565,7 @@ export default function App() {
                   <span>סיווג אוטומטי דורש בקרה אנושית</span>
                 </div>
               </section>
+              </>}
             </>
           )}
           {view === "reports" && (
