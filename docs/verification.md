@@ -2,7 +2,7 @@
 
 ## Passed
 
-- Six Python regression tests: original DOCX matching engine, Hebrew Excel export, result serialization, missing input, credential/input validation, cross-origin request protection, Monday deadline calculations and failed-job reporting.
+- Seven Python regression tests: original DOCX matching engine, Hebrew Excel export, result serialization, missing input, credential/input validation, cross-origin request protection, Monday deadline calculations, failed-job reporting and publication-detail failures.
 - Three TypeScript unit tests: Jaccard overlap, combined filtering and CSV formula/quote handling.
 - TypeScript compilation and Vite production build.
 - Browser checks of the new React UI: overview, demonstration completion, search narrowing ten records to one, record detail dialog and text similarity changing when edited.

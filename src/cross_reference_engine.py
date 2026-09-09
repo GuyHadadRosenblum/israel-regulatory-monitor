@@ -469,6 +469,10 @@ def run_cross_reference():
     # PHASE 5: Save Log (Styled) - WITH SAFE SMART MERGE FOR ADDITIONAL COLUMNS
     # -------------------------------------------------------------------------
     final_df = pd.DataFrame(final_results)
+    if not final_results:
+        schema = create_unified_row({P_TITLE: '', P_OFFICE: ''}, None, 0, '')
+        final_df = pd.DataFrame(columns=list(schema))
+        final_df['Associated_Regulations_Count'] = pd.Series(dtype='int64')
     os.makedirs(PROCESSED_DIR, exist_ok=True)
 
     # Define the custom/AI columns you want to protect from being wiped out

@@ -77,3 +77,10 @@ def test_job_failure_is_not_success(tmp_path,monkeypatch):
     web_api.execute(job,'2026-09-01')
     assert web_api.read_job('abc')['status']=='failed'
     assert web_api.read_job('abc')['stage']==1
+
+def test_detail_fetch_failure_is_not_silent():
+    from src.legislation_scraper import get_inner_page_data
+    driver=Mock()
+    driver.get.side_effect=RuntimeError('Connection failed')
+    with pytest.raises(RuntimeError,match='Could not read publication'):
+        get_inner_page_data(driver,'https://example.com/publication')

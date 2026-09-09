@@ -154,7 +154,7 @@ def scrape_legislation_portal(target_date_str="01/01/2026"):
         existing_df = pd.read_csv(OUTPUT_PATH)
         existing_urls = set(existing_df['url'].tolist())
     else:
-        existing_df = pd.DataFrame()
+        existing_df = pd.DataFrame(columns=['title', 'url', 'office', 'publish_date', 'main_file_url', 'Local_File_Path', 'Local_RIA_File_Path'])
         existing_urls = set()
 
     try:
@@ -229,6 +229,9 @@ def scrape_legislation_portal(target_date_str="01/01/2026"):
             print(f"\n[*] Update finished. {len(processed)} items added.")
         else:
             print("\n[*] No new items found.")
+            if not os.path.exists(OUTPUT_PATH):
+                os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
+                existing_df.to_csv(OUTPUT_PATH, index=False, encoding='utf-8-sig')
 
     finally:
         driver.quit()

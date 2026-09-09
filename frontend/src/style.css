@@ -517,6 +517,7 @@ thead {
   font-size: 10px;
 }
 th {
+  position: relative;
   font-weight: 500;
   padding: 12px 15px;
   border-block: 1px solid #e9eef2;
